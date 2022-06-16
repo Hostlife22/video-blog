@@ -1,11 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Category, Create, Feed, NavBar, Search, VideoPin } from '../../components';
-import { selectUser } from '../../features/auth/auth.selectors';
 
 function Home() {
-  const user = useSelector(selectUser);
   return (
     <>
       <NavBar />
