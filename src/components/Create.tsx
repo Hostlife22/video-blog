@@ -22,14 +22,19 @@ import {
 } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import { IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
-import { Spinner } from '.';
+import { AlertMsg, Spinner } from '.';
+import { useAppDispatch, useAppSelector } from '../app';
+import { selectAlert } from '../features/alert/alert.selectors';
+import { callAlert } from '../features/alert/alert.thunk';
 import { firebaseApp } from '../firebase/firebase-config';
+import { alertData } from '../utils/alert';
 import { categories } from '../utils/data';
 
 function Create() {
   const { colorMode } = useColorMode();
   const bg = useColorModeValue('gray.50', 'gray.900');
   const textColor = useColorModeValue('gray.900', 'gray.50');
+  const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState<string>('');
   const [category, setCategory] = useState<string>('Choose as category');
@@ -37,6 +42,7 @@ function Create() {
   const [videoAsset, setVdeoAsset] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(1);
+  const { alert, status, message, icon } = useAppSelector(selectAlert);
 
   const storage = getStorage(firebaseApp);
 
@@ -62,6 +68,8 @@ function Create() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setVdeoAsset(downloadURL);
           setLoading(false);
+
+          dispatch(callAlert(alertData.upload));
         });
       },
     );
@@ -74,6 +82,7 @@ function Create() {
     deleteObject(deleteRef)
       .then(() => {
         setVdeoAsset(null);
+        dispatch(callAlert(alertData.remove));
       })
       .catch((error) => {
         console.log(error);
@@ -95,6 +104,8 @@ function Create() {
         alignItems="center"
         justifyContent="center"
         gap={2}>
+        {alert && <AlertMsg status={status} msg={message} icon={icon} />}
+
         <Input
           variant="flushed"
           placeholder="Title"

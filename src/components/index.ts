@@ -1,3 +1,4 @@
+export { default as AlertMsg } from './AlertMsg';
 export { default as Category } from './Category';
 export { default as Create } from './Create';
 export { default as Feed } from './Feed';
