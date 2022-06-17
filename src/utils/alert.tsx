@@ -16,4 +16,9 @@ export const alertData: IAlertData = {
     message: 'Your video was removes from our server',
     icon: <IoWarning fontSize={25} />,
   },
+  require: {
+    status: 'error',
+    message: 'Required Fields are missing',
+    icon: <IoWarning fontSize={25} />,
+  },
 };

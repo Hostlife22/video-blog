@@ -13,6 +13,8 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { Editor } from '@tinymce/tinymce-react';
+import { doc, setDoc } from 'firebase/firestore';
 import {
   deleteObject,
   getDownloadURL,
@@ -20,13 +22,16 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+import { Editor as TinyMCEEditor } from 'tinymce';
 import { AlertMsg, Spinner } from '.';
 import { useAppDispatch, useAppSelector } from '../app';
 import { selectAlert } from '../features/alert/alert.selectors';
 import { callAlert } from '../features/alert/alert.thunk';
-import { firebaseApp } from '../firebase/firebase-config';
+import { selectUser } from '../features/auth/auth.selectors';
+import { firebaseApp, firebaseDb } from '../firebase/firebase-config';
 import { alertData } from '../utils/alert';
 import { categories } from '../utils/data';
 
@@ -35,6 +40,7 @@ function Create() {
   const bg = useColorModeValue('gray.50', 'gray.900');
   const textColor = useColorModeValue('gray.900', 'gray.50');
   const dispatch = useAppDispatch();
+  const editorRef = useRef<null | TinyMCEEditor>(null);
 
   const [title, setTitle] = useState<string>('');
   const [category, setCategory] = useState<string>('Choose as category');
@@ -42,7 +48,10 @@ function Create() {
   const [videoAsset, setVdeoAsset] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(1);
+  const [description, setDescription] = useState<string>('');
   const { alert, status, message, icon } = useAppSelector(selectAlert);
+  const [user] = useAppSelector(selectUser);
+  const navigate = useNavigate();
 
   const storage = getStorage(firebaseApp);
 
@@ -89,7 +98,38 @@ function Create() {
       });
   };
 
-  useEffect(() => {}, [videoAsset]);
+  const getDescriptionValue = () => {
+    if (editorRef.current) {
+      setDescription(editorRef.current.getContent());
+    }
+  };
+
+  const uploadDetails = async () => {
+    try {
+      setLoading(true);
+      if (!title && !category && !videoAsset) {
+        dispatch(callAlert(alertData.require));
+      } else {
+        const data = {
+          id: `${Date.now()}`,
+          userId: user?.uid,
+          videoUrl: videoAsset,
+          location,
+          title,
+          description,
+          category,
+        };
+
+        await setDoc(doc(firebaseDb, 'videos', `${Date.now()}`), data);
+        setLoading(false);
+        navigate('/', { replace: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {}, [title, location, description, category]);
 
   return (
     <Flex justifyContent="center" alignItems="center" width="full" minHeight="100vh" padding={10}>
@@ -244,6 +284,57 @@ function Create() {
             </Flex>
           )}
         </Flex>
+        <Editor
+          onChange={getDescriptionValue}
+          onInit={(evt, editor: TinyMCEEditor) => {
+            editorRef.current = editor;
+          }}
+          apiKey={import.meta.env.VITE_APP_TINYMCE_EDITOR_API}
+          init={{
+            height: 500,
+            width: '100%',
+            menubar: false,
+            plugins: [
+              'advlist',
+              'autolink',
+              'lists',
+              'link',
+              'image',
+              'charmap',
+              'preview',
+              'anchor',
+              'searchreplace',
+              'visualblocks',
+              'code',
+              'fullscreen',
+              'insertdatetime',
+              'media',
+              'table',
+              'code',
+              'help',
+              'wordcount',
+            ],
+            toolbar:
+              'undo redo | blocks | ' +
+              'bold italic forecolor | alignleft aligncenter ' +
+              'alignright alignjustify | bullist numlist outdent indent | ' +
+              'removeformat | help',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            content_css: 'dark',
+            skin: 'oxide-dark',
+          }}
+        />
+        <Button
+          isLoading={loading}
+          loadingText="Uploading"
+          colorScheme="linkedin"
+          variant={loading ? 'outline' : 'solid'}
+          width="xl"
+          _hover={{ shadow: 'lg' }}
+          fontSize={20}
+          onClick={() => uploadDetails()}>
+          Upload
+        </Button>
       </Flex>
     </Flex>
   );

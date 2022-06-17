@@ -1471,6 +1471,14 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@tinymce/tinymce-react@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-react/-/tinymce-react-4.1.0.tgz#e2a5e289dc1af03837365bebe969b1a722bf6d99"
+  integrity sha512-7qXheXhyY9a8mY5tXQUz3BFq+Z4TQ7zd/OIaKasbVzojkjCw3VWdwFhHOEcwmDDprepgQwECsYqe3AGOtehfFg==
+  dependencies:
+    prop-types "^15.6.2"
+    tinymce "^6.0.0 || ^5.5.1"
+
 "@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
@@ -3812,6 +3820,11 @@ tiny-invariant@^1.0.6:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.2.0.tgz#a1141f86b672a9148c72e978a19a73b9b94a15a9"
   integrity sha512-1Uhn/aqw5C6RI4KejVeTg6mIS7IqxnLJ8Mv2tV5rTc0qWobay7pDUz6Wi392Cnc8ak1H0F2cjoRzb2/AW4+Fvg==
+
+"tinymce@^6.0.0 || ^5.5.1":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.0.3.tgz#993db09afa473a764ad8b594cdaf744b2c7e2e74"
+  integrity sha512-4cu80kWF7nRGhviE10poZtjTkl3jNL+lycilCMfdm3KU5V7FtiQQrKbEo6GInXT05RY78Ha/NFP0gOBELcSpfg==
 
 tmp@^0.2.1:
   version "0.2.1"

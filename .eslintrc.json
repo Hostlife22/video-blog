@@ -28,6 +28,7 @@
     "no-shadow": "off",
     "no-nested-ternary": "off",
     "react/jsx-no-constructed-context-values": "off",
+    "import/no-extraneous-dependencies": "off",
     "import/no-cycle": "off",
     "react/destructuring-assignment": "off",
     "jsx-a11y/anchor-is-valid": "off",
