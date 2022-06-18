@@ -18,7 +18,7 @@ import { selectUser } from '../features/auth/auth.selectors';
 import { ImgLogo, ImgLogoDark } from '../img';
 
 function NavBar() {
-  const user = useSelector(selectUser);
+  const [user] = useSelector(selectUser);
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('gray.600', 'gray.300');
 
@@ -66,7 +66,7 @@ function NavBar() {
         </Link>
         <Menu>
           <MenuButton>
-            <Image src={user[0]?.photoURL!} width="40px" height="40px" rounded="full" />
+            <Image src={user?.photoURL!} width="40px" height="40px" rounded="full" />
           </MenuButton>
           <MenuList shadow="lg">
             <Link to="">

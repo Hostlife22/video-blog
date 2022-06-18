@@ -1,7 +1,6 @@
 import {
   Button,
   Flex,
-  FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
@@ -11,105 +10,44 @@ import {
   MenuList,
   Text,
   useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react';
-import { Editor } from '@tinymce/tinymce-react';
 import { doc, setDoc } from 'firebase/firestore';
-import {
-  deleteObject,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
-import { useEffect, useRef, useState } from 'react';
-import { IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
+import { useEffect, useState } from 'react';
+import { IoChevronDown, IoLocation } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { Editor as TinyMCEEditor } from 'tinymce';
-import { AlertMsg, Spinner } from '.';
+import { AlertMsg, TinyEditor, UploadedVideo, UploadeVideo } from '.';
 import { useAppDispatch, useAppSelector } from '../app';
 import { selectAlert } from '../features/alert/alert.selectors';
 import { callAlert } from '../features/alert/alert.thunk';
 import { selectUser } from '../features/auth/auth.selectors';
-import { firebaseApp, firebaseDb } from '../firebase/firebase-config';
+import { selectVideoAsset } from '../features/videoAsset/videoAsset.selectors';
+import { changeLoading, setVideoAsset } from '../features/videoAsset/videoAssetSlice';
+import { firebaseDb } from '../firebase/firebase-config';
 import { alertData } from '../utils/alert';
 import { categories } from '../utils/data';
 
 function Create() {
   const { colorMode } = useColorMode();
-  const bg = useColorModeValue('gray.50', 'gray.900');
-  const textColor = useColorModeValue('gray.900', 'gray.50');
+  //   const bg = useColorModeValue('gray.50', 'gray.900');
+  //   const textColor = useColorModeValue('gray.900', 'gray.50');
+
   const dispatch = useAppDispatch();
-  const editorRef = useRef<null | TinyMCEEditor>(null);
+  const { alert, status, message, icon } = useAppSelector(selectAlert);
+  const { loading, videoAsset } = useAppSelector(selectVideoAsset);
+  const [user] = useAppSelector(selectUser);
 
   const [title, setTitle] = useState<string>('');
-  const [category, setCategory] = useState<string>('Choose as category');
+  const [category, setCategory] = useState<string>('');
   const [location, setLocation] = useState<string>('');
-  const [videoAsset, setVdeoAsset] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(1);
   const [description, setDescription] = useState<string>('');
-  const { alert, status, message, icon } = useAppSelector(selectAlert);
-  const [user] = useAppSelector(selectUser);
+
   const navigate = useNavigate();
-
-  const storage = getStorage(firebaseApp);
-
-  const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-
-    setLoading(true);
-    const videoFile = e.target.files[0];
-    const storageRef = ref(storage, `Videos/${Date.now()}-${videoFile.name}`);
-
-    const uploadTask = uploadBytesResumable(storageRef, videoFile);
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(uploadProgress);
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setVdeoAsset(downloadURL);
-          setLoading(false);
-
-          dispatch(callAlert(alertData.upload));
-        });
-      },
-    );
-  };
-
-  const deleteImage = () => {
-    if (!videoAsset) return;
-
-    const deleteRef = ref(storage, videoAsset);
-    deleteObject(deleteRef)
-      .then(() => {
-        setVdeoAsset(null);
-        dispatch(callAlert(alertData.remove));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const getDescriptionValue = () => {
-    if (editorRef.current) {
-      setDescription(editorRef.current.getContent());
-    }
-  };
 
   const uploadDetails = async () => {
     try {
-      setLoading(true);
-      if (!title && !category && !videoAsset) {
-        dispatch(callAlert(alertData.require));
-      } else {
+      dispatch(changeLoading(true));
+
+      if (title && category && videoAsset) {
         const data = {
           id: `${Date.now()}`,
           userId: user?.uid,
@@ -121,15 +59,18 @@ function Create() {
         };
 
         await setDoc(doc(firebaseDb, 'videos', `${Date.now()}`), data);
-        setLoading(false);
+        dispatch(setVideoAsset(null));
         navigate('/', { replace: true });
+      } else {
+        dispatch(callAlert(alertData.require));
+        dispatch(changeLoading(false));
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {}, [title, location, description, category]);
+  useEffect(() => {}, [title, location, description, category, videoAsset]);
 
   return (
     <Flex justifyContent="center" alignItems="center" width="full" minHeight="100vh" padding={10}>
@@ -165,7 +106,7 @@ function Create() {
               colorScheme="blue"
               as={Button}
               rightIcon={<IoChevronDown fontSize={25} />}>
-              {category}
+              {category || 'Choose as category'}
             </MenuButton>
             <MenuList zIndex={101} width="md" shadow="xl">
               {categories &&
@@ -215,115 +156,9 @@ function Create() {
           borderRadius="md"
           overflow="hidden"
           position="relative">
-          {!videoAsset ? (
-            <FormLabel width="full">
-              <Flex
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
-                width="full"
-                height="full">
-                <Flex
-                  direction="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  width="full"
-                  height="full"
-                  cursor="pointer">
-                  {loading ? (
-                    <Spinner msg="Uploading Your Video" progress={progress} />
-                  ) : (
-                    <>
-                      <IoCloudUpload
-                        fontSize={30}
-                        color={colorMode === 'dark' ? '#f1f1f1' : '#111'}
-                      />
-                      <Text mt={5} fontSize={20} color={textColor}>
-                        Click to upload{' '}
-                      </Text>
-                    </>
-                  )}
-                </Flex>
-              </Flex>
-
-              {!loading && (
-                <input
-                  type="file"
-                  name="upload-image"
-                  onChange={uploadImage}
-                  style={{ width: 0, height: 0 }}
-                  accept="video/mp4,video/x-m4v,video/*"
-                />
-              )}
-            </FormLabel>
-          ) : (
-            <Flex
-              width="full"
-              height="full"
-              justifyContent="center"
-              alignItems="center"
-              bg="black"
-              position="relative">
-              <Flex
-                justifyContent="center"
-                alignItems="center"
-                width="40px"
-                height="40px"
-                rounded="full"
-                bg="red"
-                top={5}
-                right={5}
-                position="absolute"
-                cursor="pointer"
-                zIndex={10}
-                onClick={deleteImage}>
-                <IoTrash fontSize={20} color="white" />
-              </Flex>
-
-              <video src={videoAsset} controls style={{ width: '100%', height: '100%' }} />
-            </Flex>
-          )}
+          {!videoAsset ? <UploadeVideo /> : <UploadedVideo />}
         </Flex>
-        <Editor
-          onChange={getDescriptionValue}
-          onInit={(evt, editor: TinyMCEEditor) => {
-            editorRef.current = editor;
-          }}
-          apiKey={import.meta.env.VITE_APP_TINYMCE_EDITOR_API}
-          init={{
-            height: 500,
-            width: '100%',
-            menubar: false,
-            plugins: [
-              'advlist',
-              'autolink',
-              'lists',
-              'link',
-              'image',
-              'charmap',
-              'preview',
-              'anchor',
-              'searchreplace',
-              'visualblocks',
-              'code',
-              'fullscreen',
-              'insertdatetime',
-              'media',
-              'table',
-              'code',
-              'help',
-              'wordcount',
-            ],
-            toolbar:
-              'undo redo | blocks | ' +
-              'bold italic forecolor | alignleft aligncenter ' +
-              'alignright alignjustify | bullist numlist outdent indent | ' +
-              'removeformat | help',
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-            content_css: 'dark',
-            skin: 'oxide-dark',
-          }}
-        />
+        <TinyEditor handler={setDescription} />
         <Button
           isLoading={loading}
           loadingText="Uploading"

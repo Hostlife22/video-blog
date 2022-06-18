@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 // const firebaseConfig: FirebaseOptions = {
 //   apiKey: import.meta.env.VITE_APP_FIREBASE_API,
 //   authDomain: import.meta.env.VITE_APP_FIREBASE_AUTH_DOMAIN,
@@ -31,3 +32,4 @@ initializeAppCheck(firebaseApp, {
 export const firebaseAuth = getAuth(firebaseApp);
 export const provider = new GoogleAuthProvider();
 export const firebaseDb = getFirestore(firebaseApp);
+export const storage = getStorage(firebaseApp);

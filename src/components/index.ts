@@ -5,4 +5,7 @@ export { default as Feed } from './Feed';
 export { default as NavBar } from './NavBar';
 export { default as Search } from './Search';
 export { default as Spinner } from './Spinner';
+export { default as TinyEditor } from './TinyEditor';
+export { default as UploadedVideo } from './UploadedVideo';
+export { default as UploadeVideo } from './UploadeVideo';
 export { default as VideoPin } from './VideoPin';

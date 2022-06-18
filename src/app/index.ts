@@ -2,11 +2,13 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import alertReducer from '../features/alert/alertSlice';
 import authReducer from '../features/auth/authSlice';
+import videoAssetReducer from '../features/videoAsset/videoAssetSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     alert: alertReducer,
+    videoAsset: videoAssetReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
