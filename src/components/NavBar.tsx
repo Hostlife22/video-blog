@@ -12,13 +12,13 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { IoAdd, IoLogOut, IoMoon, IoSearch, IoSunny } from 'react-icons/io5';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../app';
 import { selectUser } from '../features/auth/auth.selectors';
 import { ImgLogo, ImgLogoDark } from '../img';
 
 function NavBar() {
-  const [user] = useSelector(selectUser);
+  const [user] = useAppSelector(selectUser);
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('gray.600', 'gray.300');
 

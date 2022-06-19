@@ -9,3 +9,4 @@ export { default as TinyEditor } from './TinyEditor';
 export { default as UploadedVideo } from './UploadedVideo';
 export { default as UploadeVideo } from './UploadeVideo';
 export { default as VideoPin } from './VideoPin';
+export { default as VideoPinDetail } from './VideoPinDetail';
