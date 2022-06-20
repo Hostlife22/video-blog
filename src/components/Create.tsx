@@ -22,6 +22,7 @@ import { callAlert } from '../features/alert/alert.thunk';
 import { selectUser } from '../features/auth/auth.selectors';
 import { selectVideoAsset } from '../features/videoAsset/videoAsset.selectors';
 import { changeLoading, setVideoAsset } from '../features/videoAsset/videoAssetSlice';
+import { setFeed } from '../features/videos/videosSlice';
 import { firebaseDb } from '../firebase/firebase-config';
 import { alertData } from '../utils/alert';
 import { categories } from '../utils/data';
@@ -59,6 +60,7 @@ function Create() {
         };
 
         await setDoc(doc(firebaseDb, 'videos', `${Date.now()}`), data);
+        dispatch(setFeed(data));
         dispatch(setVideoAsset(null));
         navigate('/', { replace: true });
       } else {

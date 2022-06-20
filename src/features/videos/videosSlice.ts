@@ -12,7 +12,13 @@ export const videosSlice = createSlice({
   name: 'videos',
   initialState,
   reducers: {
-    fetchUser: (state) => {},
+    setFeed: (state, action) => {
+      if (state.feed) {
+        state.feed = state.feed.concat(action.payload);
+      } else {
+        state.feed = [action.payload];
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -32,6 +38,6 @@ export const videosSlice = createSlice({
   },
 });
 
-export const { fetchUser } = videosSlice.actions;
+export const { setFeed } = videosSlice.actions;
 
 export default videosSlice.reducer;

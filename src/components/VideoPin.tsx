@@ -1,4 +1,5 @@
 import { Flex, Image, Text, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app';
@@ -52,7 +53,7 @@ function VideoPin({ data }: IVideoPinProps) {
             {data.title}
           </Text>
 
-          <Link to="">
+          <Link to={`/userDetail/${data.userId}`} style={{ display: 'contents' }}>
             <Image
               src={user?.photoURL}
               rounded="full"
@@ -64,6 +65,9 @@ function VideoPin({ data }: IVideoPinProps) {
             />
           </Link>
         </Flex>
+        <Text color={textColor} ml="auto" fontSize={12}>
+          {moment(new Date(parseInt(data.id)).toISOString()).fromNow()}
+        </Text>
       </Flex>
     </Flex>
   );
