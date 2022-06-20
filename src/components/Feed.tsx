@@ -11,9 +11,7 @@ function Feed() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!feeds) {
-      dispatch(getAllFeeds());
-    }
+    dispatch(getAllFeeds());
   }, []);
 
   if (loading) {
@@ -28,8 +26,7 @@ function Feed() {
       autoColumns="max-content"
       px="2"
       overflowX="hidden">
-      {feeds &&
-        feeds.map((feed) => <VideoPin key={feed.id} maxWidth={420} height="80px" data={feed} />)}
+      {feeds && feeds.map((feed) => <VideoPin key={feed.id} data={feed} />)}
     </SimpleGrid>
   );
 }

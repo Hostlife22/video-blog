@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './app';
 import './App.css';
 import { selectAccessToken } from './features/auth/auth.selectors';
@@ -10,6 +10,7 @@ function App() {
   const dispatch = useAppDispatch();
   const accessToken = useAppSelector(selectAccessToken);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -17,7 +18,7 @@ function App() {
 
   useEffect(() => {
     if (!accessToken) {
-      navigate('/login', { replace: true });
+      navigate('/login', { replace: true, state: { from: pathname } });
     }
   }, [accessToken]);
   return (

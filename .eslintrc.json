@@ -33,6 +33,7 @@
     "react/destructuring-assignment": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/mouse-events-have-key-events": "off",
+    "no-restricted-globals": "off",
     "radix": "off",
     "react/jsx-props-no-spreading": "off",
     "react/button-has-type": "off",

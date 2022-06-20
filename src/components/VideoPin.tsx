@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../app';
 import { selectUserInfo } from '../features/users/users.selectors';
 import { getUserInfo } from '../features/users/usersAsyncThunk';
 import { IFeedData } from '../features/videos/videos.interface';
+import { AvatarSprite } from '../img';
 
 interface IVideoPinProps {
   data: IFeedData;
@@ -55,7 +56,7 @@ function VideoPin({ data }: IVideoPinProps) {
 
           <Link to={`/userDetail/${data.userId}`} style={{ display: 'contents' }}>
             <Image
-              src={user?.photoURL}
+              src={user?.photoURL ? user?.photoURL : AvatarSprite}
               rounded="full"
               width="50px"
               height="50px"

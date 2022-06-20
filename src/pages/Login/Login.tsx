@@ -1,16 +1,23 @@
 import { Button, Flex, HStack, Image } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+import { Location, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app';
 import { selectUser } from '../../features/auth/auth.selectors';
 import { loginAsync } from '../../features/auth/authAsyncThunk';
 import { ImgMusicBg } from '../../img';
 
+interface ICustomLocation extends Location {
+  state: {
+    from: string;
+  };
+}
+
 function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
+  const { state } = useLocation() as ICustomLocation;
 
   useEffect(() => {
     if (user.length) {

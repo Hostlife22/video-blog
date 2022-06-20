@@ -11,3 +11,4 @@ export { default as UploadeVideo } from './UploadeVideo';
 export { default as UserProfile } from './UserProfile';
 export { default as VideoPin } from './VideoPin';
 export { default as VideoPinDetail } from './VideoPinDetail';
+export { default as VideoPlayer } from './VideoPlayer';

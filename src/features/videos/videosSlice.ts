@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IVideosState } from './videos.interface';
-import { getAllFeeds } from './videosAsyncThunk';
+import { getAllFeeds, getSpecificVideo } from './videosAsyncThunk';
 
 const initialState: IVideosState = {
   feed: null,
@@ -32,6 +32,23 @@ export const videosSlice = createSlice({
         state.loading = false;
       })
       .addCase(getAllFeeds.rejected, (state) => {
+        state.status = 'failed';
+        state.loading = false;
+      })
+      .addCase(getSpecificVideo.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(getSpecificVideo.fulfilled, (state, action) => {
+        state.status = 'idle';
+
+        if (action.payload) {
+          state.feed = [action.payload];
+        }
+
+        state.loading = false;
+      })
+      .addCase(getSpecificVideo.rejected, (state) => {
         state.status = 'failed';
         state.loading = false;
       });
