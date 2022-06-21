@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IVideosState } from './videos.interface';
 import { getAllFeeds, getSpecificVideo } from './videosAsyncThunk';
 
@@ -18,6 +18,9 @@ export const videosSlice = createSlice({
       } else {
         state.feed = [action.payload];
       }
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -55,6 +58,6 @@ export const videosSlice = createSlice({
   },
 });
 
-export const { setFeed } = videosSlice.actions;
+export const { setFeed, setLoading } = videosSlice.actions;
 
 export default videosSlice.reducer;

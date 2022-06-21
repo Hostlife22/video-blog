@@ -66,7 +66,14 @@ function NavBar() {
         </Link>
         <Menu>
           <MenuButton>
-            <Image src={user?.photoURL!} width="40px" height="40px" rounded="full" />
+            <Image
+              src={user?.photoURL!}
+              width="40px"
+              height="40px"
+              minHeight="40px"
+              minWidth="40px"
+              rounded="full"
+            />
           </MenuButton>
           <MenuList shadow="lg">
             <Link to="">
