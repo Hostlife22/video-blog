@@ -42,7 +42,7 @@ function VideoPinDetail() {
   const usersInfo = useAppSelector(selectUserInfo);
 
   useEffect(() => {
-    if (videoId && !feeds) {
+    if (videoId) {
       dispatch(getSpecificVideo(videoId));
     }
   }, [videoId]);

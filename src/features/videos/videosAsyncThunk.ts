@@ -13,6 +13,25 @@ export const getAllFeeds = createAsyncThunk('videos/allFeeds', async (_, { rejec
   }
 });
 
+export const categoryFeeds = createAsyncThunk(
+  'videos/category',
+  async (categoryId: string, { rejectWithValue }) => {
+    try {
+      const feeds = await getDocs(
+        query(
+          collection(firebaseDb, 'videos'),
+          where('category', '==', categoryId),
+          orderBy('id', 'desc'),
+        ),
+      );
+
+      return feeds.docs.map((date) => date.data() as IFeedData);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
 export const recommendedFeed = createAsyncThunk(
   'videos/recommended',
   async ({ categoryId, videoId }: IArgs, { rejectWithValue }) => {
@@ -28,8 +47,25 @@ export const recommendedFeed = createAsyncThunk(
 
       return feeds.docs.map((date) => date.data() as IFeedData);
     } catch (e) {
-      console.log(e);
+      return rejectWithValue(e);
+    }
+  },
+);
 
+export const userUploadedVideos = createAsyncThunk(
+  'videos/uploaded',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const feeds = await getDocs(
+        query(
+          collection(firebaseDb, 'videos'),
+          where('userId', '==', userId),
+          orderBy('id', 'desc'),
+        ),
+      );
+
+      return feeds.docs.map((date) => date.data() as IFeedData);
+    } catch (e) {
       return rejectWithValue(e);
     }
   },

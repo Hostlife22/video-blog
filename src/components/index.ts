@@ -3,6 +3,7 @@ export { default as Category } from './Category';
 export { default as Create } from './Create';
 export { default as Feed } from './Feed';
 export { default as NavBar } from './NavBar';
+export { default as NotFound } from './NotFound';
 export { default as PopUp } from './PopUp';
 export { default as RecommendedVideos } from './RecommendedVideos';
 export { default as Search } from './Search';

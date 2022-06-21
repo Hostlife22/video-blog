@@ -1,6 +1,7 @@
 export interface IVideosState {
   feed: IFeedData[] | null;
   recommended: IFeedData[] | null;
+  uploaded: IFeedData[] | null;
   loading: boolean;
   status: 'idle' | 'loading' | 'failed';
 }

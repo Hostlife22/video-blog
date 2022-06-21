@@ -84,7 +84,7 @@ function NavBar() {
             />
           </MenuButton>
           <MenuList shadow="lg">
-            <Link to="">
+            <Link to={`userDetail/${user?.uid}`}>
               <MenuItem>My Account</MenuItem>
             </Link>
             <MenuItem flexDirection="row" alignItems="center" gap={4} onClick={logOutUser}>

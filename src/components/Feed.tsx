@@ -1,21 +1,31 @@
 import { SimpleGrid } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { Spinner, VideoPin } from '.';
+import { useParams } from 'react-router-dom';
+import { NotFound, Spinner, VideoPin } from '.';
 import { useAppDispatch, useAppSelector } from '../app';
 import { selecVideos, selecVideosLoading } from '../features/videos/videos.selectors';
-import { getAllFeeds } from '../features/videos/videosAsyncThunk';
+import { categoryFeeds, getAllFeeds } from '../features/videos/videosAsyncThunk';
 
 function Feed() {
   const loading = useAppSelector(selecVideosLoading);
   const feeds = useAppSelector(selecVideos);
   const dispatch = useAppDispatch();
+  const { categoryId } = useParams();
 
   useEffect(() => {
-    dispatch(getAllFeeds());
-  }, []);
+    if (categoryId) {
+      dispatch(categoryFeeds(categoryId));
+    } else {
+      dispatch(getAllFeeds());
+    }
+  }, [categoryId]);
 
   if (loading) {
     return <Spinner msg="Loading your feeds" />;
+  }
+
+  if (feeds && !feeds?.length) {
+    return <NotFound />;
   }
 
   return (

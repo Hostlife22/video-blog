@@ -1,10 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IVideosState } from './videos.interface';
-import { getAllFeeds, getSpecificVideo, recommendedFeed } from './videosAsyncThunk';
+import {
+  categoryFeeds,
+  getAllFeeds,
+  getSpecificVideo,
+  recommendedFeed,
+  userUploadedVideos,
+} from './videosAsyncThunk';
 
 const initialState: IVideosState = {
   feed: null,
   recommended: null,
+  uploaded: null,
   loading: false,
   status: 'idle',
 };
@@ -36,6 +43,32 @@ export const videosSlice = createSlice({
         state.loading = false;
       })
       .addCase(getAllFeeds.rejected, (state) => {
+        state.status = 'failed';
+        state.loading = false;
+      })
+      .addCase(categoryFeeds.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(categoryFeeds.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.feed = action.payload;
+        state.loading = false;
+      })
+      .addCase(categoryFeeds.rejected, (state) => {
+        state.status = 'failed';
+        state.loading = false;
+      })
+      .addCase(userUploadedVideos.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(userUploadedVideos.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.uploaded = action.payload;
+        state.loading = false;
+      })
+      .addCase(userUploadedVideos.rejected, (state) => {
         state.status = 'failed';
         state.loading = false;
       })
