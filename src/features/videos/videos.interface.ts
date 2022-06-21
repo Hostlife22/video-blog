@@ -1,5 +1,6 @@
 export interface IVideosState {
   feed: IFeedData[] | null;
+  recommended: IFeedData[] | null;
   loading: boolean;
   status: 'idle' | 'loading' | 'failed';
 }
@@ -21,4 +22,9 @@ export interface IUserInfo {
   photoURL: string;
   providerId: string;
   uid: string;
+}
+
+export interface IArgs {
+  videoId: string;
+  categoryId: string;
 }

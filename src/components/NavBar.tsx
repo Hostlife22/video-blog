@@ -12,15 +12,23 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { IoAdd, IoLogOut, IoMoon, IoSearch, IoSunny } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
-import { useAppSelector } from '../app';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../app';
 import { selectUser } from '../features/auth/auth.selectors';
+import { logOut } from '../features/auth/authSlice';
 import { ImgLogo, ImgLogoDark } from '../img';
 
 function NavBar() {
   const [user] = useAppSelector(selectUser);
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('gray.600', 'gray.300');
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const logOutUser = () => {
+    dispatch(logOut());
+    navigate('/login', { replace: true });
+  };
 
   return (
     <Flex justifyContent="space-between" alignItems="center" width="100vw" p={4}>
@@ -79,7 +87,7 @@ function NavBar() {
             <Link to="">
               <MenuItem>My Account</MenuItem>
             </Link>
-            <MenuItem flexDirection="row" alignItems="center" gap={4}>
+            <MenuItem flexDirection="row" alignItems="center" gap={4} onClick={logOutUser}>
               Logout <IoLogOut fontSize={20} />
             </MenuItem>
           </MenuList>

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { firebaseDb } from '../../firebase/firebase-config';
-import { IFeedData } from './videos.interface';
+import { IArgs, IFeedData } from './videos.interface';
 
 export const getAllFeeds = createAsyncThunk('videos/allFeeds', async (_, { rejectWithValue }) => {
   try {
@@ -12,6 +12,28 @@ export const getAllFeeds = createAsyncThunk('videos/allFeeds', async (_, { rejec
     return rejectWithValue(e);
   }
 });
+
+export const recommendedFeed = createAsyncThunk(
+  'videos/recommended',
+  async ({ categoryId, videoId }: IArgs, { rejectWithValue }) => {
+    try {
+      const feeds = await getDocs(
+        query(
+          collection(firebaseDb, 'videos'),
+          where('category', '==', categoryId),
+          where('id', '!=', videoId),
+          orderBy('id', 'desc'),
+        ),
+      );
+
+      return feeds.docs.map((date) => date.data() as IFeedData);
+    } catch (e) {
+      console.log(e);
+
+      return rejectWithValue(e);
+    }
+  },
+);
 
 export const getSpecificVideo = createAsyncThunk(
   'videos/video',
