@@ -2,6 +2,7 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import alertReducer from '../features/alert/alertSlice';
 import authReducer from '../features/auth/authSlice';
+import searchReducer from '../features/search/searchSlice';
 import usersReducer from '../features/users/usersSlice';
 import videoAssetReducer from '../features/videoAsset/videoAssetSlice';
 import videosReducer from '../features/videos/videosSlice';
@@ -13,6 +14,7 @@ const store = configureStore({
     videoAsset: videoAssetReducer,
     videos: videosReducer,
     users: usersReducer,
+    search: searchReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

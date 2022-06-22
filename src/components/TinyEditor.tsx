@@ -23,7 +23,7 @@ function TinyEditor({ handler }: ITinyEditorProps) {
       }}
       apiKey={import.meta.env.VITE_APP_TINYMCE_EDITOR_API}
       init={{
-        height: 500,
+        height: 300,
         width: '100%',
         menubar: false,
         plugins: [

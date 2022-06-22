@@ -16,11 +16,15 @@ function Home() {
     <>
       <NavBar />
       <Flex width="100vw">
-        <Flex direction="column" justifyContent="start" alignItems="center" width="5%">
+        <Flex
+          direction="column"
+          justifyContent="start"
+          alignItems="center"
+          width={['10%', '7%', '5%']}>
           {categories &&
             categories.map((category) => <Category key={category.id} data={category} />)}
         </Flex>
-        <Flex width="95%" px={4} justifyContent="center" alignItems="center">
+        <Flex width={['90%', '93%', '95%']} px={4} justifyContent="center" alignItems="center">
           <Routes>
             <Route path="/" element={<Feed />} />
             <Route path="/category/:categoryId" element={<Feed />} />

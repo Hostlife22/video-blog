@@ -11,9 +11,14 @@ function Spinner({ msg, progress }: ISpinnerProps) {
   useEffect(() => {}, [progress]);
 
   return (
-    <Flex direction="column" justifyContent="center" alignItems="center" height="full" px={10}>
+    <Flex
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      height="full"
+      px={[0, null, 10]}>
       <Circles color="#00BFFF" height={80} width={80} />
-      <Text fontSize={25} textAlign="center" px={2}>
+      <Text fontSize={[18, null, 25]} textAlign="center" px={2}>
         {msg}
       </Text>
 
@@ -24,7 +29,7 @@ function Spinner({ msg, progress }: ISpinnerProps) {
           hasStripe
           size="sm"
           value={Math.floor(progress)}
-          width="lg"
+          width={['90%', null, 'full']}
           rounded="sm"
           colorScheme="linkedin"
         />

@@ -11,17 +11,23 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useTransition } from 'react';
 import { IoAdd, IoLogOut, IoMoon, IoSearch, IoSunny } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app';
 import { selectUser } from '../features/auth/auth.selectors';
 import { logOut } from '../features/auth/authSlice';
+import { selectSearchValue } from '../features/search/search.selectors';
+import { changeSearchValue } from '../features/search/searchSlice';
 import { ImgLogo, ImgLogoDark } from '../img';
 
 function NavBar() {
+  const [isPending, startTransition] = useTransition();
   const [user] = useAppSelector(selectUser);
+  const value = useAppSelector(selectSearchValue);
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('gray.600', 'gray.300');
+  const bgMenu = useColorModeValue('gray.300', 'gray.900');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -30,8 +36,19 @@ function NavBar() {
     navigate('/login', { replace: true });
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    startTransition(() => {
+      dispatch(changeSearchValue(e.target.value));
+    });
+  };
+
   return (
-    <Flex justifyContent="space-between" alignItems="center" width="100vw" p={4}>
+    <Flex
+      justifyContent="space-between"
+      alignItems="center"
+      width="100vw"
+      p={4}
+      direction={['column', null, 'row']}>
       <Link to="/">
         <Image src={colorMode === 'light' ? ImgLogoDark : ImgLogo} width="180px" />
       </Link>
@@ -43,9 +60,20 @@ function NavBar() {
           fontSize={18}
           fontWeight="medium"
           variant="filled"
+          value={value}
+          onChange={handleSearch}
         />
       </InputGroup>
-      <Flex justifyContent="center" alignItems="center">
+      <Flex
+        justifyContent={['space-evenly', null, 'center']}
+        alignItems="center"
+        position={['fixed', null, 'static']}
+        bottom={0}
+        left={0}
+        right={0}
+        zIndex={100}
+        p={['5px', null, 0]}
+        bg={[bgMenu, null, 'transparent']}>
         <Flex
           width="40px"
           height="40px"

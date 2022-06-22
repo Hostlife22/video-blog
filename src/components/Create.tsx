@@ -29,9 +29,6 @@ import { categories } from '../utils/data';
 
 function Create() {
   const { colorMode } = useColorMode();
-  //   const bg = useColorModeValue('gray.50', 'gray.900');
-  //   const textColor = useColorModeValue('gray.900', 'gray.50');
-
   const dispatch = useAppDispatch();
   const { alert, status, message, icon } = useAppSelector(selectAlert);
   const { loading, videoAsset } = useAppSelector(selectVideoAsset);
@@ -75,9 +72,15 @@ function Create() {
   useEffect(() => {}, [title, location, description, category, videoAsset]);
 
   return (
-    <Flex justifyContent="center" alignItems="center" width="full" minHeight="100vh" padding={10}>
+    <Flex
+      justifyContent="center"
+      alignItems="center"
+      width="full"
+      minHeight="100vh"
+      padding={[2, null, 10]}
+      margin={['0 0 60px 0', null, 0]}>
       <Flex
-        width="80%"
+        width={['90%', null, '80%']}
         height="full"
         border="1px"
         borderColor="gray.300"
@@ -101,7 +104,13 @@ function Create() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Flex justifyContent="space-between" width="full" alignContent="center" gap={8} my={4}>
+        <Flex
+          justifyContent="space-between"
+          width="full"
+          alignContent="center"
+          gap={[4, null, 8]}
+          my={[2, null, 4]}
+          direction={['column-reverse', null, 'row']}>
           <Menu>
             <MenuButton
               width="full"
@@ -110,7 +119,7 @@ function Create() {
               rightIcon={<IoChevronDown fontSize={25} />}>
               {category || 'Choose as category'}
             </MenuButton>
-            <MenuList zIndex={101} width="md" shadow="xl">
+            <MenuList zIndex={99} width={['1.5', null, 'md']} shadow="xl">
               {categories &&
                 categories.map((data) => (
                   <MenuItem
@@ -152,7 +161,7 @@ function Create() {
         <Flex
           border="1px"
           borderColor="gray.500"
-          height="400px"
+          height={['200px', null, '400px']}
           borderStyle="dashed"
           width="full"
           borderRadius="md"
@@ -166,7 +175,7 @@ function Create() {
           loadingText="Uploading"
           colorScheme="linkedin"
           variant={loading ? 'outline' : 'solid'}
-          width="xl"
+          width="full"
           _hover={{ shadow: 'lg' }}
           fontSize={20}
           onClick={() => uploadDetails()}>

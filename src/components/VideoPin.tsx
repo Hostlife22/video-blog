@@ -27,6 +27,7 @@ function VideoPin({ data }: IVideoPinProps) {
   return (
     <Flex
       justifyContent="space-between"
+      justifySelf={['center', null, 'auto']}
       alignItems="center"
       flexDirection="column"
       cursor="pointer"
@@ -35,7 +36,7 @@ function VideoPin({ data }: IVideoPinProps) {
       rounded="md"
       overflow="hidden"
       position="relative"
-      maxWidth="300px">
+      maxWidth={['300px', null, '400px']}>
       <Link to={`/videoDetail/${data?.id}`}>
         <video
           src={data.videoUrl}
