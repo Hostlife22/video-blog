@@ -19,6 +19,7 @@ import {
 } from 'react-icons/md';
 import ReactPlayer from 'react-player';
 import screenfull from 'screenfull';
+import useMediaQuery from '../hooks/mediaQuery';
 import { ImgLogo } from '../img';
 import { format } from '../utils/format';
 
@@ -39,6 +40,7 @@ function VideoPlayer({ videoUrl }: VideoPlayerProps) {
   const [muted, setMuted] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(0.5);
   const [played, setPlayed] = useState<number>(0);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const playerRef = useRef<ReactPlayer>(null);
   const playerContainer = useRef<HTMLDivElement>(null);
@@ -142,22 +144,27 @@ function VideoPlayer({ videoUrl }: VideoPlayerProps) {
             />
           </Slider>
 
-          <Flex width="full" alignItems="center" my={2} gap={10}>
+          <Flex
+            width="full"
+            alignItems="center"
+            my={2}
+            justifyContent="space-between"
+            gap={[0, null, 1, 10]}>
             <MdOutlineReplay10
-              fontSize={30}
+              fontSize={isMobile ? 20 : 30}
               color="#f1f1f1"
               cursor="pointer"
               onClick={handleFastRewind}
             />
             <Box onClick={() => setIsPlaying((prev) => !prev)}>
               {!isPlaying ? (
-                <IoPlay fontSize={30} color="#f2f2f2" cursor="pointer" />
+                <IoPlay fontSize={isMobile ? 20 : 30} color="#f2f2f2" cursor="pointer" />
               ) : (
-                <IoPause fontSize={30} color="#f2f2f2" cursor="pointer" />
+                <IoPause fontSize={isMobile ? 20 : 30} color="#f2f2f2" cursor="pointer" />
               )}
             </Box>
             <MdForward10
-              fontSize={30}
+              fontSize={isMobile ? 20 : 30}
               color="#f1f1f1"
               cursor="pointer"
               onClick={handleFastForward}
@@ -166,9 +173,9 @@ function VideoPlayer({ videoUrl }: VideoPlayerProps) {
             <Flex alignItems="center">
               <Box onClick={() => setMuted((prev) => !prev)}>
                 {!muted ? (
-                  <MdVolumeUp fontSize={30} color="#f1f1f1" cursor="pointer" />
+                  <MdVolumeUp fontSize={isMobile ? 20 : 30} color="#f1f1f1" cursor="pointer" />
                 ) : (
-                  <MdVolumeOff fontSize={30} color="#f1f1f1" cursor="pointer" />
+                  <MdVolumeOff fontSize={isMobile ? 20 : 30} color="#f1f1f1" cursor="pointer" />
                 )}
               </Box>
               <Slider
@@ -177,7 +184,7 @@ function VideoPlayer({ videoUrl }: VideoPlayerProps) {
                 min={0}
                 max={100}
                 size="sm"
-                width={16}
+                width={[8, 14, 16]}
                 mx={2}
                 onChangeStart={onVolumeChange}
                 onChangeEnd={onVolumeChange}>
@@ -188,19 +195,19 @@ function VideoPlayer({ videoUrl }: VideoPlayerProps) {
               </Slider>
             </Flex>
             <Flex alignItems="center" gap={2}>
-              <Text fontSize={16} color="whitesmoke">
+              <Text fontSize={[12, null, 16]} color="whitesmoke">
                 {elapsedTime}
               </Text>
-              <Text fontSize={16} color="whitesmoke">
+              <Text fontSize={[12, null, 16]} color="whitesmoke">
                 /
               </Text>
-              <Text fontSize={16} color="whitesmoke">
+              <Text fontSize={[12, null, 16]} color="whitesmoke">
                 {totalDuration}
               </Text>
             </Flex>
-            <Image src={ImgLogo} width="120px" ml="auto" />
+            <Image src={ImgLogo} width="120px" ml="auto" display={['none', null, 'block']} />
             <MdFullscreen
-              fontSize={30}
+              fontSize={isMobile ? 20 : 30}
               color="#f1f1f1"
               cursor="pointer"
               onClick={() => {

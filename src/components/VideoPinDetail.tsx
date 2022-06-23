@@ -27,6 +27,7 @@ import {
   selecVideosLoading,
 } from '../features/videos/videos.selectors';
 import { getSpecificVideo, recommendedFeed } from '../features/videos/videosAsyncThunk';
+import useMediaQuery from '../hooks/mediaQuery';
 import { AvatarSprite } from '../img';
 
 function VideoPinDetail() {
@@ -40,6 +41,7 @@ function VideoPinDetail() {
   const recFeeds = useAppSelector(selectRecommendedVideos);
   const [localUser] = useAppSelector(selectUser);
   const usersInfo = useAppSelector(selectUserInfo);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
     if (videoId) {
@@ -95,7 +97,7 @@ function VideoPinDetail() {
       </Flex>
 
       <Grid templateColumns="repeat(4, 1fr)" gap={2} width="100%">
-        <GridItem width="100%" colSpan={3}>
+        <GridItem width="100%" colSpan={[4, null, 3]}>
           <VideoPlayer videoUrl={videoInfo?.videoUrl} />
           {videoInfo?.description && (
             <Flex my={6} direction="column">
@@ -106,17 +108,17 @@ function VideoPinDetail() {
             </Flex>
           )}
         </GridItem>
-        <GridItem width="100%" colSpan={1}>
+        <GridItem width="100%" colSpan={[4, null, 1]}>
           {user && (
             <Flex direction="column" width="full">
               <Flex alignItems="center" width="full">
                 <Image
                   src={user?.photoURL ? user?.photoURL : AvatarSprite}
                   rounded="full"
-                  width="60px"
-                  height="60px"
-                  minHeight="60px"
-                  minWidth="60px"
+                  width={isMobile ? '40px' : '60px'}
+                  height={isMobile ? '40px' : '60px'}
+                  minHeight={isMobile ? '40px' : '60px'}
+                  minWidth={isMobile ? '40px' : '60px'}
                 />
 
                 <Flex direction="column" ml={3}>
@@ -133,7 +135,7 @@ function VideoPinDetail() {
                   )}
                 </Flex>
               </Flex>
-              <Flex justifyContent="space-around" mt={6}>
+              <Flex justifyContent={['left', null, 'space-around']} mt={6} gap={[2, null, 0]}>
                 {user?.uid === localUser.uid && <PopUp videoId={videoInfo?.id} />}
                 <a
                   href={videoInfo?.videoUrl}
