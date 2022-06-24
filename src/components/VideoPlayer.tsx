@@ -48,7 +48,7 @@ function VideoPlayer({ videoUrl }: VideoPlayerProps) {
   useEffect(() => {}, [muted, volume, played]);
 
   const onVolumeChange = (event: number) => {
-    setVolume(Math.floor(event / 100));
+    setVolume(event / 100);
 
     event === 0 ? setMuted(true) : setMuted(false);
   };
