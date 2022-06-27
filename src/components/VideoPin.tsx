@@ -42,7 +42,7 @@ function VideoPin({ data }: IVideoPinProps) {
           src={data.videoUrl}
           muted
           onMouseOver={(e) => {
-            e.currentTarget.play();
+            e.currentTarget.play().catch((err) => console.warn(err));
           }}
           onMouseOut={(e) => {
             e.currentTarget.pause();

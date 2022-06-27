@@ -104,6 +104,7 @@ function NavBar() {
           <MenuButton>
             <Image
               src={user?.photoURL!}
+              mr={['0px', null, '10px']}
               width="40px"
               height="40px"
               minHeight="40px"
