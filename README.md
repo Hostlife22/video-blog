@@ -20,4 +20,4 @@
 - [react-player](https://www.npmjs.com/package/react-player)
 - [eslint](https://eslint.org/)
 - [stylelint](https://stylelint.io/)
-- [eslint](https://eslint.org/)
+- [prettier](https://prettier.io/)
